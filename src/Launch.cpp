@@ -80,9 +80,10 @@ void mute(DWORD RLPid) {
 
 
 
-
+// TODO: https://github.com/RLBot/RLBot/blob/master/src/main/python/rlbot/gamelaunch/epic_launch.py - C:\ProgramData\Epic\EpicGamesLauncher\Data\Manifests
 TCHAR exePath[] = TEXT("C:\\Program Files\\Epic Games\\rocketleague\\Binaries\\Win64\\RocketLeague.exe");
 TCHAR launchCommand[] = TEXT("RocketLeague.exe -EpicPortal -nomovie -SimulationInstance");
+
 //TCHAR exePath[] = TEXT("C:\\Games\\Steamapps\\common\\rocketleague\\Binaries\\Win64\\RocketLeague.exe.unpacked.exe");
 //TCHAR launchCommand[] = TEXT("RocketLeague.exe.unpacked.exe");
 
@@ -140,18 +141,6 @@ std::wstring getBakkesModPath() {
     return std::wstring();
 }
 
-void editBMCfg(std::wstring bmPath) {
-    std::ifstream ifile(bmPath + L"cfg\\plugins.cfg", std::fstream::in);
-    std::string line;
-    while (std::getline(ifile, line))
-        if (line == "plugin load rlsimbakkesplugin")
-            return;
-    ifile.close();
-    std::ofstream ofile(bmPath + L"cfg\\plugins.cfg", std::fstream::out | std::fstream::app);
-    ofile << "\nplugin load rlsimbakkesplugin";
-    ofile.close();
-}
-
 
 void injectDLL(HANDLE hProcess, std::wstring path) {
     LPVOID LoadLibAddr = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryW");
@@ -163,7 +152,6 @@ void injectDLL(HANDLE hProcess, std::wstring path) {
     VirtualFreeEx(hProcess, dereercomp, pathSize, MEM_RELEASE);
     CloseHandle(remoteThread);
 }
-
 
 
 void injectBM(HANDLE hProcess) {
