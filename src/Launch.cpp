@@ -10,10 +10,7 @@
 #include <thread>
 #include <fstream>
 #include <filesystem>
-
-
-
-
+#include <stdexcept>
 
 
 
@@ -85,7 +82,7 @@ void mute(DWORD RLPid) {
 
 
 TCHAR exePath[] = TEXT("C:\\Program Files\\Epic Games\\rocketleague\\Binaries\\Win64\\RocketLeague.exe");
-TCHAR launchCommand[] = TEXT("RocketLeague.exe -EpicPortal -nomovie");
+TCHAR launchCommand[] = TEXT("RocketLeague.exe -EpicPortal -nomovie -SimulationInstance");
 //TCHAR exePath[] = TEXT("C:\\Games\\Steamapps\\common\\rocketleague\\Binaries\\Win64\\RocketLeague.exe.unpacked.exe");
 //TCHAR launchCommand[] = TEXT("RocketLeague.exe.unpacked.exe");
 
@@ -97,7 +94,6 @@ DWORD launchRocketLeague(HANDLE& hProcess) {
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
-
 
     // start the program up
     CreateProcess(exePath,   // the path
@@ -113,7 +109,7 @@ DWORD launchRocketLeague(HANDLE& hProcess) {
     );
 
     if (pi.dwProcessId == 0)
-        throw "Failed to launch rocket league";
+        throw std::runtime_error("Failed to launch rocket league");
 
     hProcess = pi.hProcess;
     CloseHandle(pi.hThread);
@@ -170,18 +166,7 @@ void injectDLL(HANDLE hProcess, std::wstring path) {
 
 
 
-void injectDLLs(HANDLE hProcess) {
+void injectBM(HANDLE hProcess) {
     auto bmPath = getBakkesModPath();
-    TCHAR selfPath[MAX_PATH];
-    GetModuleFileName(GetModuleHandle(NULL), selfPath, sizeof(selfPath));
-    auto RLSimBakkesPath = std::filesystem::path(selfPath).parent_path();
-    RLSimBakkesPath += "\\RLSimBakkesPlugin.dll";
-    try {
-        std::filesystem::copy_file(
-            RLSimBakkesPath,
-            bmPath + L"plugins\\RLSimBakkesPlugin.dll",
-            std::filesystem::copy_options::overwrite_existing);
-    } catch(std::filesystem::filesystem_error const& _) { }
-    editBMCfg(bmPath);
     injectDLL(hProcess, bmPath + L"dll\\bakkesmod.dll");
 }

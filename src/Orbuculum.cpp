@@ -7,15 +7,9 @@
 #include <thread>
 
 
-Orbuculum::Orbuculum() : ipComm(false) {
-	// if (ipComm.mem->version != Shared::VERSION) {
-	// 	std::cerr << "Orbuculum: Shared memory version mismatch. Has " << Shared::VERSION << ", but server requires " << ipComm.mem->gameState.version << std::endl;
-	// 	throw OrbuculumVersionMisMatchException(Shared::VERSION, ipComm.mem->gameState.version);
-	// }
-
+Orbuculum::Orbuculum() : OrbuculumInternal(), RLBotBM(true, std::to_string(pid = launchRocketLeague(hProcess))) {
 	try {
-		pid = launchRocketLeague(hProcess);
-		injectDLLs(hProcess);
+		injectBM(hProcess);
 
 		do {
 			using namespace std::chrono_literals;
@@ -23,9 +17,9 @@ Orbuculum::Orbuculum() : ipComm(false) {
 			tryHideRocketLeagueWindow(pid);
 		} while (false);
 		std::cout << "connected" << std::endl;
-	} catch (...) {
+	} catch (std::runtime_error& e) {
+		std::cerr << "Orbuculum error: " << e.what() << std::endl;
 		Orbuculum::~Orbuculum();
-		throw;
 	}
 }
 
@@ -36,9 +30,9 @@ Orbuculum::~Orbuculum() {
 	}
 }
 
-void Orbuculum::setBotInput(const ControllerInput& controls, const int carIndex) {
-	ipComm.mem->gameState.cars[carIndex].input = controls;
-}
+// void Orbuculum::setBotInput(const ControllerInput& controls, const int carIndex) {
+// 	ipComm.mem->gameState.cars[carIndex].input = controls;
+// }
 
 // GameState& Orbuculum::getGameState() {
 // 	return ipComm.mem->gameState;
