@@ -2,18 +2,17 @@
 
 #include <stdexcept>
 
-#include "shared/SharedObjects.h"
-#include "shared/IPComm.h"
+#include "RLBotBM.h"
 
 
-typedef RLBotBM::Shared::GameStateObj GameState;
-typedef RLBotBM::Shared::ControllerInput ControllerInput;
-typedef RLBotBM::Shared::Vec3 Vec3;
-typedef RLBotBM::Shared::Quat Quat;
-typedef RLBotBM::Shared::StateSetObj StateSetObj;
+typedef RLBotBM::GameStateObj GameState;
+typedef RLBotBM::ControllerInput ControllerInput;
+typedef RLBotBM::Vec3 Vec3;
+typedef RLBotBM::Quat Quat;
+typedef RLBotBM::StateSetObj StateSetObj;
 
 class Orbuculum {
-	RLBotBM::Shared::IPComm ipComm;
+	RLBotBM::IPComm ipComm;
 	int lastTick = 0;
 	
 	HANDLE hProcess = NULL;
@@ -21,6 +20,8 @@ class Orbuculum {
 	
 public:
 	Orbuculum();
+	~Orbuculum();
+	
 	void getCurrentState(GameState& state);
 
 	// set controls for bot at carIndex

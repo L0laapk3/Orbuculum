@@ -1,5 +1,4 @@
 #include "Launch.h"
-#include "Shared.h"
 
 #include <Windows.h>
 #include <oleacc.h>

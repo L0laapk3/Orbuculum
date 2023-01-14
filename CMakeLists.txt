@@ -1,26 +1,20 @@
 cmake_minimum_required(VERSION 3.9.4)
-project(RLBotBM VERSION 0.1.0)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+project(Orbuculum LANGUAGES CXX)
 
 file(GLOB source_files ${PROJECT_SOURCE_DIR}/src/*.cpp)
+set(RLBOT-BM_DIR ${PROJECT_SOURCE_DIR}/RLBot-BM)
 
-set(CMAKE_CPP_COMPILER clang++)
+add_subdirectory(RLBot-BM)
 
+add_library(${PROJECT_NAME} STATIC ${source_files})
 
-add_library(RLBotBM STATIC ${source_files})
+include_directories(${RLBOT-BM_DIR}/src)
+target_link_libraries(${PROJECT_NAME} PUBLIC RLBot-BM)
 
-target_include_directories(RLBotBM PUBLIC ${PROJECT_SOURCE_DIR}/src)
-target_compile_features(RLBotBM PUBLIC cxx_std_20)
+target_include_directories(${PROJECT_NAME} PUBLIC inc lib/inc)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
-set_property(TARGET RLBotBM PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-set(CMAKE_CXX_FLAGS "-march=native -D_MT -Xclang --dependent-lib=msvcrt")
-set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} -g -gcodeview -D_DLL")
-
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-use=${PROJECT_SOURCE_DIR}/tb6.profdata")
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack) 
- 
+#link linux libraries
+if (UNIX)
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_DL_LIBS})
+endif (UNIX)
