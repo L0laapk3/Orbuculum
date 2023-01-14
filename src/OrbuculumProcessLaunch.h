@@ -6,4 +6,4 @@
 DWORD launchRocketLeague(HANDLE& hProcess);
 void injectBM(HANDLE hProcess);
 
-void tryHideRocketLeagueWindow(DWORD pid);
+bool tryHideRocketLeagueWindow(DWORD pid);

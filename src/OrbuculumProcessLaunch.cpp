@@ -1,4 +1,4 @@
-#include "Launch.h"
+#include "OrbuculumProcessLaunch.h"
 
 #include <Windows.h>
 #include <oleacc.h>
@@ -14,17 +14,25 @@
 
 
 
-void tryHideRocketLeagueWindow(DWORD pid) {
-    EnumWindows([](HWND hWnd, LPARAM pid) -> BOOL {
+bool tryHideRocketLeagueWindow(DWORD pid) {
+	struct EnumParam {
+		DWORD pid;
+		bool success;
+	} param{ pid, false };
+    EnumWindows([](HWND hWnd, LPARAM _param) -> BOOL {
+		EnumParam* param = reinterpret_cast<EnumParam*>(_param);
         DWORD pidWnd;
         GetWindowThreadProcessId(hWnd, &pidWnd);
-        if (pid == pidWnd) {
-            if (0)
+        if (param->pid == pidWnd) {
+            if (1)
                 ShowWindow(hWnd, SW_HIDE); // hides the game
             PostMessageA(hWnd, WM_KILLFOCUS, NULL, NULL); // unfocuses the game, causing it to mute itself
+			param->success = true;
+			return false;
         }
         return true;
-    }, pid);
+    }, reinterpret_cast<LPARAM>(&param));
+	return param.success;
 }
 
 void mute(DWORD RLPid) {

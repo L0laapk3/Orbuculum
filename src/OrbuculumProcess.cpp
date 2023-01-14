@@ -1,16 +1,17 @@
 
 #include "Orbuculum.h"
 
-#include "Launch.h"
+#include "OrbuculumProcessLaunch.h"
 
 #include <iostream>
 #include <thread>
-#include <cstdlib>
+#include <exception>
 #include <mutex>
 #include <queue>
 
 
 
+// TODO: might have to do something like this to be more thourough: https://stackoverflow.com/questions/24012773/c-winapi-how-to-kill-child-processes-when-the-calling-parent-process-is-for
 static std::vector<OrbuculumProcess*> globalInst;
 static std::mutex m;
 
@@ -33,14 +34,8 @@ OrbuculumProcess::OrbuculumProcess() {
 	}
 	
 	try {
+		pid = launchRocketLeague(hProcess);
 		injectBM(hProcess);
-
-		do {
-			using namespace std::chrono_literals;
-			std::this_thread::sleep_for(10ms);
-			tryHideRocketLeagueWindow(pid);
-		} while (false);
-		std::cout << "connected" << std::endl;
 	} catch (std::runtime_error& e) {
 		std::cerr << "Orbuculum initialization error: " << e.what() << std::endl;
 		OrbuculumProcess::~OrbuculumProcess();

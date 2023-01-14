@@ -1,12 +1,17 @@
 
 #include "Orbuculum.h"
-
-#include "Launch.h"
+#include "OrbuculumProcessLaunch.h"
 
 #include <iostream>
+#include <thread>
 
 
-Orbuculum::Orbuculum() : OrbuculumProcess(), RLBotBM(true, std::to_string(pid = launchRocketLeague(hProcess))) {
+Orbuculum::Orbuculum() : OrbuculumProcess(), RLBotBM(true, std::to_string(pid)) {
+	do {
+		using namespace std::chrono_literals;
+		std::this_thread::sleep_for(10ms);
+		tryHideRocketLeagueWindow(pid);
+	} while (!pollNextTick(liveState));
 }
 
 
