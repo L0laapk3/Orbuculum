@@ -5,6 +5,44 @@
 
 #include <iostream>
 #include <thread>
+#include <cstdlib>
+#include <mutex>
+#include <queue>
+
+
+
+static std::vector<OrbuculumInternal*> globalInst;
+static std::mutex m;
+
+OrbuculumInternal::OrbuculumInternal() {
+	std::unique_lock<std::mutex> lock(m);
+
+	globalInst.push_back(this);
+
+	static bool cleanupRegistered = false;
+	if (!cleanupRegistered) {
+		cleanupRegistered = true;
+		std::atexit([]() {
+			while (!globalInst.empty()) {
+				globalInst.back()->~OrbuculumInternal();
+				globalInst.pop_back();
+			}
+		});
+	}
+}
+OrbuculumInternal::~OrbuculumInternal() {
+	bool kill;
+	{
+		std::unique_lock<std::mutex> lock(m);
+		kill = hProcess != NULL;
+		hProcess = NULL;
+		globalInst.erase(std::find(globalInst.begin(), globalInst.end(), this));
+	}
+	if (kill) {
+		TerminateProcess(hProcess, 1);
+		CloseHandle(hProcess);
+	}
+}
 
 
 Orbuculum::Orbuculum() : OrbuculumInternal(), RLBotBM(true, std::to_string(pid = launchRocketLeague(hProcess))) {
@@ -23,24 +61,7 @@ Orbuculum::Orbuculum() : OrbuculumInternal(), RLBotBM(true, std::to_string(pid =
 	}
 }
 
-Orbuculum::~Orbuculum() {
-	if (hProcess != NULL) {
-		TerminateProcess(hProcess, 1);
-		CloseHandle(hProcess);
-	}
-}
 
-// void Orbuculum::setBotInput(const ControllerInput& controls, const int carIndex) {
-// 	ipComm.mem->gameState.cars[carIndex].input = controls;
-// }
-
-// GameState& Orbuculum::getGameState() {
-// 	return ipComm.mem->gameState;
-// }
-
-// StateSetObj& Orbuculum::getStateSetObj() {
-// 	return ipComm.mem->stateSetObj;
-// }
 
 
 // bool Orbuculum::simulateTicks(GameStateObj& state, int numTicks) {
