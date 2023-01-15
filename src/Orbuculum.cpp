@@ -7,11 +7,18 @@
 
 
 Orbuculum::Orbuculum() : OrbuculumProcess(), RLBotBM(true, std::to_string(pid)) {
+	int ms = 0;
 	do {
+		if (ms > 30000)
+			throw std::runtime_error("Orbuculum: Rocket League window not found");
+		ms += 10;
 		using namespace std::chrono_literals;
 		std::this_thread::sleep_for(10ms);
 		tryHideRocketLeagueWindow(pid);
 	} while (!pollNextTick(liveState));
+	
+	// set car 0 to be controlled by
+	ipComm.mem->gameState.cars[0].RLBotBMControlled = true;
 }
 
 

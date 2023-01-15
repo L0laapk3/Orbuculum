@@ -24,7 +24,7 @@ bool tryHideRocketLeagueWindow(DWORD pid) {
         DWORD pidWnd;
         GetWindowThreadProcessId(hWnd, &pidWnd);
         if (param->pid == pidWnd) {
-            if (1)
+            if (0)
                 ShowWindow(hWnd, SW_HIDE); // hides the game
             PostMessageA(hWnd, WM_KILLFOCUS, NULL, NULL); // unfocuses the game, causing it to mute itself
 			param->success = true;
@@ -90,7 +90,7 @@ void mute(DWORD RLPid) {
 
 // TODO: https://github.com/RLBot/RLBot/blob/master/src/main/python/rlbot/gamelaunch/epic_launch.py - C:\ProgramData\Epic\EpicGamesLauncher\Data\Manifests
 TCHAR exePath[] = TEXT("C:\\Program Files\\Epic Games\\rocketleague\\Binaries\\Win64\\RocketLeague.exe");
-TCHAR launchCommand[] = TEXT("RocketLeague.exe -EpicPortal -nomovie -SimulationInstance");
+TCHAR launchCommand[] = TEXT("RocketLeague.exe -rlbot -EpicPortal -nomovie -SimulationInstance");
 
 //TCHAR exePath[] = TEXT("C:\\Games\\Steamapps\\common\\rocketleague\\Binaries\\Win64\\RocketLeague.exe.unpacked.exe");
 //TCHAR launchCommand[] = TEXT("RocketLeague.exe.unpacked.exe");
