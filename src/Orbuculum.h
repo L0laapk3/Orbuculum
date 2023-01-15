@@ -21,4 +21,7 @@ public:
 	};
 	template<long numCars, long numBalls>
 	ActionSequence createSequence(OrbuculumState<numCars, numBalls>& startState, std::function<StepResult(RLBotBM_NS::GameState&)> stepFn);
+
+public:
+	using RLBotBM::ipComm;
 };
