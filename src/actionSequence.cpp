@@ -12,12 +12,12 @@ int getLength(const ActionSequence& seq) {
 }
 
 
-void ActionSequenceExecutor::restart(ActionSequence::const_iterator begin) {
+void ActionSequenceExecutor::restart(ActionSequence::iterator begin) {
 	currentStep = begin;
 	actionTicks = 0;
 }
 
-bool ActionSequenceExecutor::step(ActionSequence::const_iterator end, int ticks) {
+bool ActionSequenceExecutor::step(ActionSequence::iterator end, int ticks) {
 	actionTicks += ticks;
 	
 	while (true) {
@@ -32,7 +32,7 @@ bool ActionSequenceExecutor::step(ActionSequence::const_iterator end, int ticks)
 	}
 }
 
-bool ActionSequenceExecutor::finished(ActionSequence::const_iterator end) {
+bool ActionSequenceExecutor::finished(ActionSequence::iterator end) {
 	return currentStep >= end;
 }
 

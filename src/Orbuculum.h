@@ -20,7 +20,7 @@ public:
 
 	struct StepResult {
 		bool stop;
-		ControllerInput input;
+		RLBotBM_NS::ControllerInput input;
 	};
 	template<long numCars, long numBalls>
 	ActionSequence createSequence(OrbuculumState<numCars, numBalls>& startState, std::function<StepResult(RLBotBM_NS::GameState&)> stepFn);

@@ -2,7 +2,7 @@
 
 #include "RLBotBM.h"
 
-#include <vector>
+#include <span>
 
 
 
@@ -11,18 +11,18 @@ struct Action {
 	RLBotBM::ControllerInput input;
 };
 
-typedef std::vector<Action> ActionSequence;
+typedef std::span<Action> ActionSequence;
 
 int getLength(const ActionSequence& seq);
 
 class ActionSequenceExecutor {
 	
 public:
-	ActionSequence::const_iterator currentStep;
+	ActionSequence::iterator currentStep;
 	int actionTicks;
 
-	void restart(ActionSequence::const_iterator begin);
-	bool step(ActionSequence::const_iterator end, int ticks);
-	bool finished(ActionSequence::const_iterator end);
+	void restart(ActionSequence::iterator begin);
+	bool step(ActionSequence::iterator end, int ticks);
+	bool finished(ActionSequence::iterator end);
 	const RLBotBM::ControllerInput& getInput();
 };

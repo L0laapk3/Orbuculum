@@ -3,11 +3,11 @@
 #include "SharedObjects.h"
 
 
-typedef BallState OrbuculumBallState;
+typedef RLBotBM::BallState OrbuculumBallState;
 
-struct OrbuculumCarStateFrame : public CarState {
-	ControllerInput input;
-}
+struct OrbuculumCarStateFrame : public RLBotBM::CarState {
+	RLBotBM::ControllerInput input;
+};
 
 struct OrbuculumCarState {
 	OrbuculumCarStateFrame current, last;
