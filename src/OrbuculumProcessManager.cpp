@@ -12,10 +12,10 @@
 
 
 // TODO: might have to do something like this to be more thourough: https://stackoverflow.com/questions/24012773/c-winapi-how-to-kill-child-processes-when-the-calling-parent-process-is-for
-static std::vector<OrbuculumProcess*> globalInst;
+static std::vector<OrbuculumProcessManager*> globalInst;
 static std::mutex m;
 
-OrbuculumProcess::OrbuculumProcess() {
+OrbuculumProcessManager::OrbuculumProcessManager() {
 	{
 		std::unique_lock<std::mutex> lock(m);
 
@@ -26,7 +26,7 @@ OrbuculumProcess::OrbuculumProcess() {
 			cleanupRegistered = true;
 			std::atexit([]() {
 				while (!globalInst.empty()) {
-					globalInst.back()->~OrbuculumProcess();
+					globalInst.back()->~OrbuculumProcessManager();
 					globalInst.pop_back();
 				}
 			});
@@ -38,12 +38,12 @@ OrbuculumProcess::OrbuculumProcess() {
 		injectBM(hProcess);
 	} catch (std::runtime_error& e) {
 		std::cerr << "Orbuculum initialization error: " << e.what() << std::endl;
-		OrbuculumProcess::~OrbuculumProcess();
+		OrbuculumProcessManager::~OrbuculumProcessManager();
 		throw e;
 	}
 }
 
-OrbuculumProcess::~OrbuculumProcess() {
+OrbuculumProcessManager::~OrbuculumProcessManager() {
 	bool kill;
 	{
 		std::unique_lock<std::mutex> lock(m);

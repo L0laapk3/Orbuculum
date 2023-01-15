@@ -7,11 +7,11 @@
 #include <windows.h>
 
 
-class OrbuculumProcess {
+class OrbuculumProcessManager {
 protected:
 	HANDLE hProcess = NULL;
 	DWORD pid = 0;
 public:
-	OrbuculumProcess();
-	~OrbuculumProcess();
+	OrbuculumProcessManager();
+	~OrbuculumProcessManager();
 };

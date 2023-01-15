@@ -6,7 +6,7 @@
 #include <thread>
 
 
-Orbuculum::Orbuculum() : OrbuculumProcess(), RLBotBM(true, std::to_string(pid)) {
+Orbuculum::Orbuculum() : OrbuculumProcessManager(), RLBotBM(true, std::to_string(pid)) {
 	int ms = 0;
 	do {
 		if (ms > 30000)

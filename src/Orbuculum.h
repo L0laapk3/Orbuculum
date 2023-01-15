@@ -3,20 +3,17 @@
 #include <functional>
 
 #include "RLBotBM.h"
-#include "OrbuculumProcess.h"
+#include "OrbuculumProcessManager.h"
 #include "OrbuculumState.h"
 #include "actionSequence.h"
 
 
 namespace RLBotBM_NS = RLBotBM;
-class Orbuculum : public OrbuculumProcess, public RLBotBM::RLBotBM {
+class Orbuculum : public OrbuculumProcessManager, public RLBotBM::RLBotBM {
 public:
 	RLBotBM_NS::GameState liveState;
 
 	Orbuculum();
-
-	template<long numCars, long numBalls>
-	void SimulateSequence(OrbuculumState<numCars, numBalls>& startState, ActionSequence& sequence);
 
 	struct StepResult {
 		bool stop;
