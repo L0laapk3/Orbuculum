@@ -8,17 +8,20 @@
 
 Orbuculum::Orbuculum() : OrbuculumProcessManager(), RLBotBM(true, std::to_string(pid)) {
 	int ms = 0;
+
+	// set car 0 to be controlled by us
+	ipComm.mem->gameState.cars[0].RLBotBMControlled = true;
+
 	do {
-		if (ms > 30000)
+		if (ms > 30000) {
+			std::cerr << "Orbuculum: Rocket League window not found" << std::endl;
 			throw std::runtime_error("Orbuculum: Rocket League window not found");
+		}
 		ms += 10;
 		using namespace std::chrono_literals;
 		std::this_thread::sleep_for(10ms);
 		tryHideRocketLeagueWindow(pid);
 	} while (!pollNextTick(liveState));
-	
-	// set car 0 to be controlled by
-	ipComm.mem->gameState.cars[0].RLBotBMControlled = true;
 }
 
 
@@ -33,7 +36,7 @@ Orbuculum::Orbuculum() : OrbuculumProcessManager(), RLBotBM(true, std::to_string
 // 	} else {
 // 		// signal the framework that we're ready with current tick
 // 		ipComm.cvWaitControls.notifyOne();
-		
+
 // 		// wait for next tick
 // 		ipComm.cvWaitTick.waitOne<true>();
 // 		while (lastTick == ipComm.mem->gameState.tick) // eat any possible extra abandoned notifications if we're not on the next tick yet
@@ -41,7 +44,7 @@ Orbuculum::Orbuculum() : OrbuculumProcessManager(), RLBotBM(true, std::to_string
 
 // 		hadToWait = true;
 // 	}
-	
+
 // 	getCurrentState(state);
 // 	return hadToWait;
 // }
