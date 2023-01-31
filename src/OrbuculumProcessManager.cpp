@@ -11,7 +11,7 @@
 
 
 
-// TODO: might have to do something like this to be more thourough: https://stackoverflow.com/questions/24012773/c-winapi-how-to-kill-child-processes-when-the-calling-parent-process-is-for
+// TODO: might have to do something like this to be more thorough: https://stackoverflow.com/questions/24012773/c-winapi-how-to-kill-child-processes-when-the-calling-parent-process-is-for
 static std::vector<OrbuculumProcessManager*> globalInst;
 static std::mutex m;
 
@@ -32,7 +32,7 @@ OrbuculumProcessManager::OrbuculumProcessManager() {
 			});
 		}
 	}
-	
+
 	try {
 		pid = launchRocketLeague(hProcess);
 		injectBM(hProcess);

@@ -26,7 +26,6 @@ Orbuculum::Orbuculum() : OrbuculumProcessManager(), RLBotBM(true, std::to_string
 
 
 
-
 // bool Orbuculum::simulateTicks(GameStateObj& state, int numTicks) {
 // 	bool hadToWait = false;
 // 	// lock the wait cv to prevent tick from being updated later
